@@ -29,7 +29,8 @@
         }
         public static void HiLowLimitTries()
         {
-            int number, userInput, count = 0;
+            int number, userInput = 0, count = 0;
+            const int maxTries = 7;
 
             Random generator = new Random();
             number = generator.Next(1, 101);
@@ -37,39 +38,58 @@
             Console.WriteLine("I will pick a number, 1-100, and you must guess it.");
             Console.WriteLine("I will tell you if you are higher, or lower than my number.");
             Console.WriteLine();
-            Console.WriteLine("Guess your first number: ");
-            Int32.TryParse(Console.ReadLine(), out userInput);
-            if (userInput == number)
-                Console.WriteLine("Wow, first try!");
-            else
-                Console.WriteLine("Keep trying.");
-                Console.WriteLine();
 
-                while (userInput != number)
+            while (userInput != number && count < maxTries)
+            {
+                Console.Write("Enter a guess: ");
+
+                if (Int32.TryParse(Console.ReadLine(), out userInput))
                 {
-                    Console.WriteLine("Guess again: ");
-                    Console.WriteLine();
-
-                    if (Int32.TryParse(Console.ReadLine(), out userInput))
+                    if (userInput < 1 || userInput > 100)
                     {
-                    if (userInput < number)
-                    {
-                        Console.WriteLine("Too Low!");
+                        Console.WriteLine("Invalid input. Keep it between 1 and 100!");
                         Console.WriteLine();
+                        count++;
                     }
                     else if (userInput > number)
                     {
-                        Console.WriteLine("Too High!");
+                        Console.WriteLine("Too high!");
                         Console.WriteLine();
+                        count++;
                     }
-                    else if (userInput == number)
-                        Console.WriteLine("Just Right!");
+                    else if (userInput < number)
+                    {
+                        Console.WriteLine("Too low!");
+                        Console.WriteLine();
+                        count++;
+                    }
                     else
-                        Console.WriteLine("Invalid input.");
+                    {
+                        Console.WriteLine("BINGO!");
+                        count++;
                     }
                 }
+                else
+                {
+                    Console.WriteLine("Invalid input. That's not a number!");
+                    Console.WriteLine();
+                    count++;
+                }
+            }
 
-                Console.WriteLine("You guessed too many times... BOOOOOO!"); // finish challenge.
+            if (userInput != number && count >= maxTries)
+            {
+                Console.WriteLine("Too many tries... the number was " + number + ".");
+            }
+            else if (count == 1)
+            {
+                Console.WriteLine("It took you " + count + " try!");
+            }
+            else
+            {
+                Console.WriteLine("It took you " + count + " tries.");
+            }
         }
+
     }
 }
